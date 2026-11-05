@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "labs": [
+    {
+      "slug": "hola-labs",
+      "nombre": "Hola, Labs",
+      "descripcion": "Primer lab de ejemplo: la plantilla base funcionando, con modo oscuro y un registro de eventos.",
+      "fecha": "2026-11-05",
+      "estado": "publicado",
+      "dispositivo": false
+    }
+  ]
+}

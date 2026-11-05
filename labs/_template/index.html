@@ -1,0 +1,273 @@
+<!doctype html>
+<!--
+  PLANTILLA DE LAB · Etherial Labs
+  Copia esta carpeta a labs/<tu-slug>/ y edita lo marcado con «EDITA».
+  Reglas (ver docs/LABS.md):
+    - Nada de secretos, tokens ni claves en este archivo: todo lo que está aquí
+      es público.
+    - No llames a la API de Etherial Art ni a Supabase: los labs están aislados
+      del sitio y del panel a propósito.
+    - Todo lo que el usuario escriba o venga de un dispositivo se muestra con
+      textContent, nunca con innerHTML.
+-->
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Nombre del lab · Etherial Labs</title>
+    <!-- «EDITA» el título -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=DM+Sans:wght@400;500&display=swap"
+    />
+    <style>
+      /* Tokens de marca (los del panel de Etherial Art). Si se publica
+         docs/BRAND.md en etherial-art-web, manda ese documento. */
+      :root {
+        --gl: #1f8f85;
+        --gp: #dff2ef;
+        --teal: #a8d8d4;
+        --gold: #f5d000;
+        --cream: #f5fafa;
+        --dark: #0f2b29;
+        --muted: #3d706b;
+        --hint: #467874;
+        --card: #ffffff;
+        --border: #b2ddd9;
+        --danger: #b91c1c;
+        --dangerbg: #fef2f2;
+        --serif: 'Cormorant Garamond', Georgia, serif;
+        --sans: 'DM Sans', system-ui, sans-serif;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) {
+          --gl: #4dbdb5;
+          --gp: #122422;
+          --teal: #5ec9c1;
+          --cream: #0a1f1e;
+          --dark: #e8f5f4;
+          --muted: #7bb8b4;
+          --hint: #5e9f9a;
+          --card: #122422;
+          --border: #1f4744;
+          --danger: #fca5a5;
+          --dangerbg: #2a0a0a;
+        }
+      }
+      :root[data-theme='dark'] {
+        --gl: #4dbdb5;
+        --gp: #122422;
+        --teal: #5ec9c1;
+        --cream: #0a1f1e;
+        --dark: #e8f5f4;
+        --muted: #7bb8b4;
+        --hint: #5e9f9a;
+        --card: #122422;
+        --border: #1f4744;
+        --danger: #fca5a5;
+        --dangerbg: #2a0a0a;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--cream);
+        color: var(--dark);
+        font-family: var(--sans);
+        line-height: 1.5;
+      }
+      .contenedor {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 24px 16px 48px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      header .eyebrow {
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      h1 {
+        font-family: var(--serif);
+        font-weight: 500;
+        font-size: clamp(2rem, 6vw, 2.8rem);
+        line-height: 1.1;
+        margin: 4px 0;
+      }
+      .sub {
+        color: var(--hint);
+        margin: 0;
+      }
+      .tarjeta {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 16px;
+      }
+      .botones {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      button {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 0 18px;
+        border-radius: 10px;
+        border: 1px solid var(--gl);
+        background: var(--gl);
+        color: var(--cream);
+        font: 500 15px var(--sans);
+        cursor: pointer;
+      }
+      button.secundario {
+        background: transparent;
+        color: var(--gl);
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      :focus-visible {
+        outline: 2px solid var(--gl);
+        outline-offset: 2px;
+      }
+      .registro {
+        min-height: 120px;
+        max-height: 320px;
+        overflow: auto;
+        margin: 0;
+        padding: 12px;
+        border-radius: 10px;
+        background: var(--gp);
+        font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+      .error {
+        display: none;
+        padding: 12px 14px;
+        border-radius: 10px;
+        background: var(--dangerbg);
+        color: var(--danger);
+      }
+      .error.visible {
+        display: block;
+      }
+      footer {
+        font-size: 12px;
+        color: var(--hint);
+        text-align: center;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="contenedor">
+      <header>
+        <div class="eyebrow">Etherial Labs · experimento</div>
+        <h1>Nombre del lab</h1>
+        <!-- «EDITA» -->
+        <p class="sub">Una línea que diga qué hace este experimento.</p>
+        <!-- «EDITA» -->
+      </header>
+
+      <div id="error" class="error" role="alert"></div>
+
+      <section class="tarjeta" aria-labelledby="titulo-control">
+        <h2 id="titulo-control" class="eyebrow">Control</h2>
+        <div class="botones">
+          <button id="btn-accion" type="button">Probar</button>
+          <button id="btn-dispositivo" class="secundario" type="button" hidden>
+            Conectar dispositivo
+          </button>
+          <button id="btn-limpiar" class="secundario" type="button">Limpiar</button>
+        </div>
+      </section>
+
+      <section class="tarjeta" aria-labelledby="titulo-registro">
+        <h2 id="titulo-registro" class="eyebrow">Registro</h2>
+        <pre id="registro" class="registro" role="log" aria-live="polite"></pre>
+      </section>
+
+      <footer>Etherial Labs · página experimental, puede cambiar o desaparecer.</footer>
+    </main>
+
+    <script type="module">
+      const registro = document.getElementById('registro');
+      const cajaError = document.getElementById('error');
+
+      // textContent siempre: lo que llega de un dispositivo o del usuario
+      // nunca se interpreta como HTML.
+      function log(mensaje) {
+        const hora = new Date().toLocaleTimeString();
+        registro.textContent += `[${hora}] ${mensaje}\n`;
+        registro.scrollTop = registro.scrollHeight;
+      }
+
+      // Ningún error se queda en silencio: se ve en la página y en consola.
+      function mostrarError(texto, causa) {
+        cajaError.textContent = texto;
+        cajaError.classList.add('visible');
+        console.error(texto, causa);
+      }
+
+      document.getElementById('btn-limpiar').addEventListener('click', () => {
+        registro.textContent = '';
+        cajaError.classList.remove('visible');
+      });
+
+      // «EDITA»: la lógica del experimento.
+      document.getElementById('btn-accion').addEventListener('click', async () => {
+        try {
+          log('Hola desde la plantilla.');
+        } catch (e) {
+          mostrarError('Algo falló al ejecutar el experimento.', e);
+        }
+      });
+
+      // Ejemplo de dispositivo (WebSerial). Solo funciona en Chrome/Edge y
+      // abriendo el lab en su propia pestaña: dentro de la vista previa del
+      // panel (iframe con sandbox) los permisos de hardware están bloqueados.
+      const btnDispositivo = document.getElementById('btn-dispositivo');
+      if ('serial' in navigator) {
+        btnDispositivo.hidden = false;
+        btnDispositivo.addEventListener('click', async () => {
+          try {
+            const puerto = await navigator.serial.requestPort();
+            await puerto.open({ baudRate: 9600 });
+            log('Dispositivo conectado.');
+            const lector = puerto.readable.pipeThrough(new TextDecoderStream()).getReader();
+            for (;;) {
+              const { value, done } = await lector.read();
+              if (done) break;
+              log(value.trim());
+            }
+          } catch (e) {
+            if (e && e.name === 'NotFoundError') {
+              log('No se eligió ningún dispositivo.');
+            } else {
+              mostrarError('No se pudo conectar con el dispositivo.', e);
+            }
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

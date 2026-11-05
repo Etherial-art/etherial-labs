@@ -1,0 +1,16 @@
+# Cabeceras de Cloudflare Pages para labs.etherialart.com.
+# Los labs viven en otro origen que el sitio y el panel: su JavaScript no puede
+# leer la sesión del panel ni los datos del sitio. Estas cabeceras añaden:
+#  - frame-ancestors: solo el panel (etherialart.com) puede mostrarlos en un
+#    iframe; nadie más los enmarca.
+#  - noindex: los experimentos no aparecen en buscadores.
+#  - Referrer-Policy: no se filtra la URL del lab a terceros.
+/*
+  Content-Security-Policy: frame-ancestors https://etherialart.com
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  X-Robots-Tag: noindex, nofollow
+  Permissions-Policy: interest-cohort=()
+
+/labs.json
+  Cache-Control: no-cache
