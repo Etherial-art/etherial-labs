@@ -1,26 +1,139 @@
 <!doctype html>
 <html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-  <title>Etherial Labs</title>
-  <style>
-    :root { color-scheme: dark; }
-    body {
-      margin: 0; min-height: 100vh;
-      display: grid; place-items: center;
-      background: #0b1f1e; color: #cfe9e5;
-      font-family: system-ui, sans-serif; text-align: center;
-    }
-    h1 { font-weight: 300; letter-spacing: .08em; }
-    p { opacity: .7; }
-  </style>
-</head>
-<body>
-  <main>
-    <h1>Etherial Labs</h1>
-    <p>Espacio de experimentos. Próximamente.</p>
-  </main>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Etherial Labs</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      :root {
+        --gl: #1f8f85;
+        --cream: #f5fafa;
+        --dark: #0f2b29;
+        --muted: #3d706b;
+        --hint: #467874;
+        --card: #ffffff;
+        --border: #b2ddd9;
+        --serif: 'Cormorant Garamond', Georgia, serif;
+        --sans: 'DM Sans', system-ui, sans-serif;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --gl: #4dbdb5;
+          --cream: #0b1f1e;
+          --dark: #cfe9e5;
+          --muted: #7bb8b4;
+          --hint: #5e9f9a;
+          --card: #122422;
+          --border: #1f4744;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--cream);
+        color: var(--dark);
+        font-family: var(--sans);
+      }
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 40px 16px;
+      }
+      h1 {
+        font-family: var(--serif);
+        font-weight: 400;
+        letter-spacing: 0.08em;
+        margin: 0 0 4px;
+      }
+      .sub {
+        color: var(--hint);
+        margin: 0 0 24px;
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 12px;
+      }
+      a.lab {
+        display: block;
+        min-height: 44px;
+        padding: 14px 16px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: var(--card);
+        color: inherit;
+        text-decoration: none;
+      }
+      a.lab:focus-visible,
+      a.lab:hover {
+        border-color: var(--gl);
+        outline: none;
+      }
+      .nombre {
+        font-size: 17px;
+        color: var(--gl);
+      }
+      .meta {
+        font-size: 12px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Etherial Labs</h1>
+      <p class="sub">Espacio de experimentos.</p>
+      <ul id="labs" aria-live="polite"></ul>
+    </main>
+    <script type="module">
+      // Lista los labs de /labs.json (el build solo deja ahí los publicados y
+      // archivados). Se construyen los nodos con textContent: nada del JSON se
+      // interpreta como HTML.
+      const lista = document.getElementById('labs');
+      const PATRON_SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+      function item(texto) {
+        const li = document.createElement('li');
+        li.className = 'meta';
+        li.textContent = texto;
+        return li;
+      }
+
+      try {
+        const res = await fetch('/labs.json', { cache: 'no-cache' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const { labs } = await res.json();
+        const visibles = labs.filter((l) => PATRON_SLUG.test(l.slug) && l.estado !== 'borrador');
+        if (!visibles.length) lista.append(item('Próximamente.'));
+        for (const lab of visibles) {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.className = 'lab';
+          a.href = `/labs/${lab.slug}/`;
+          const nombre = document.createElement('div');
+          nombre.className = 'nombre';
+          nombre.textContent = lab.nombre;
+          const desc = document.createElement('div');
+          desc.textContent = lab.descripcion;
+          const meta = document.createElement('div');
+          meta.className = 'meta';
+          meta.textContent = `${lab.fecha}${lab.estado === 'archivado' ? ' · archivado' : ''}${lab.dispositivo ? ' · usa un dispositivo' : ''}`;
+          a.append(nombre, desc, meta);
+          li.append(a);
+          lista.append(li);
+        }
+      } catch (e) {
+        console.error('No se pudo cargar labs.json', e);
+        lista.append(item('No se pudo cargar la lista de experimentos.'));
+      }
+    </script>
+  </body>
 </html>

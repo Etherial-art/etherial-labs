@@ -1,0 +1,11 @@
+{
+  "name": "etherial-labs",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Experimentos de Etherial Art en labs.etherialart.com (HTML estático, sin dependencias)",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test"
+  }
+}
